@@ -4,10 +4,22 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const app = express();
+const router = require("./router");
+const mongoose = require("mongoose");
+
+// DB setup
+mongoose.connect("mongodb://localhost:auth/auth", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 // App setup
+app.use(morgan("combined")); // --> middleware (morgan is a logging framework)
+app.use(bodyParser.json({ type: "*/*" })); // --> change it to a JSONs
+router(app);
 
 // server setup
-const port = process.env.PORT || 3090;
+const port = process.env.PORT || 4000;
 // http is native node library
 const server = http.createServer(app);
 server.listen(port);
